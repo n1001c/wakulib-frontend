@@ -13,10 +13,12 @@
 
 <script>
 export default {
+  middleware: 'loggedIn',
   methods: {
     logout () {
-      this.$store.dispatch('auth/logout')
-      this.$router.push({ path: '/login' })
+      this.$store.dispatch('auth/logout').then(() => {
+        this.$router.push({ path: '/login' })
+      })
     }
   }
 }

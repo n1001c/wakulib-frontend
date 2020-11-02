@@ -1,3 +1,5 @@
+import createPersistedState from 'vuex-persistedstate'
+
 export const state = () => ({
   id: 0,
   name: '',
@@ -27,17 +29,20 @@ export const mutations = {
 }
 
 export const actions = {
-  login (context, payload) {
-    this.$axios.$post('login', {
+  async login (context, payload) {
+    const res = await this.$axios.$post('login', {
       email: payload.email,
       password: payload.password
-    }).then((res) => {
-      context.commit('storelogin', res)
     })
+    context.commit('storelogin', res)
   },
-  logout (context, payload) {
-    this.$axios.$post('logout').then((res) => {
-      context.commit('storelogout', res)
-    })
+  async logout (context, payload) {
+    await this.$axios.$post('logout')
+    context.commit('storelogout')
+  },
+  nuxtClientInit ({ commit, state, dispatch }, { req }) {
+    createPersistedState({
+      key: 'wakulib'
+    })(this)
   }
 }

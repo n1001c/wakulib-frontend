@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'Login',
+  middleware: 'loggedOut',
   data () {
     return {
       isError: false,
@@ -27,11 +27,11 @@ export default {
   methods: {
     login () {
       try {
-        this.$store.dispatch('auth/login', this.form)
-        this.$router.push({ path: '/' })
+        this.$store.dispatch('auth/login', this.form).then(() => {
+          this.$router.push({ path: '/' })
+        })
       } catch (error) {
         this.isError = true
-        console.log(error)
       }
     }
   }
