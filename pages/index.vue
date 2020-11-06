@@ -1,10 +1,11 @@
 <template>
   <div>
-    <h1>ログイン成功</h1>
-    <p>id: {{ $store.state.auth.id }}</p>
-    <p>name: {{ $store.state.auth.name }}</p>
-    <p>email: {{ $store.state.auth.email }}</p>
-    <p>token: {{ $store.state.auth.token }}</p>
+    <navbar />
+    <books-tables />
+    <add-book />
+    <edit-book />
+    <delete-book />
+    <navbar-bottom />
     <button @click="logout">
       ログアウト
     </button>
