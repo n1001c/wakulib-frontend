@@ -1,129 +1,81 @@
 <template>
   <div class="main">
-    <vue-good-table
-      :columns="columns"
-      :rows="books"
-      :fixed-header="true"
-      max-height="calc(100vh - 100px)"
-      style-class="main-table"
-    >
-      <template slot="table-row" slot-scope="props">
-        <a
-          v-if="props.column.field == 'edit'"
-          @click="openEditBook(props.row.id)"
-        >
-          <i class="fas fa-pen icon" />
-        </a>
-        <div v-else-if="props.column.field == 'status'">
-          <figure :class="props.row.status" class="circle" />
-          {{ props.row.status }}
-        </div>
-        <span v-else>{{ props.formattedRow[props.column.field] }}</span>
-      </template>
-    </vue-good-table>
+    <table class="main-table">
+      <thead>
+        <tr>
+          <th @click="sortBy('title')" class="clm-title">
+            名前
+          </th>
+          <th @click="sortBy('author')" class="clm-author">
+            作者
+          </th>
+          <th @click="sortBy('volume')" class="clm-volume">
+            巻数
+          </th>
+          <th @click="sortBy('chapter')" class="clm-chapter">
+            話数
+          </th>
+          <th @click="sortBy('status')" class="clm-status">
+            状態
+          </th>
+          <th @click="sortBy('point')" class="clm-point">
+            点数
+          </th>
+          <th @click="sortBy('updated_at')" class="clm-updated">
+            更新
+          </th>
+          <th class="clm-edit">
+            <!--編集-->
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(book, index) in $store.getters['book/books']">
+          <td class="clm-title">
+            {{ book.title }}
+          </td>
+          <td class="clm-author">
+            {{ book.author }}
+          </td>
+          <td class="clm-volume">
+            {{ book.volume }}
+          </td>
+          <td class="clm-chapter">
+            {{ book.chapter }}
+          </td>
+          <td class="clm-status">
+            <figure :class="book.status" class="circle" />
+            {{ book.status }}
+          </td>
+          <td class="clm-point">
+            {{ book.point }}
+          </td>
+          <td class="clm-update">
+            {{ book.updated_at }}
+          </td>
+          <td class="clm-edit">
+            <a @click="openEditBook(index)">
+              <i class="fas fa-pen icon" />
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-      books: [],
-      columns: [
-        {
-          label: '名前',
-          field: 'title',
-          filterOptions: {
-            enabled: true,
-            placeholder: 'Search...'
-          },
-          width: '33%',
-          thClass: 'clm-title',
-          tdClass: 'clm-title'
-        },
-        {
-          label: '作者',
-          field: 'author',
-          filterOptions: {
-            enabled: true,
-            placeholder: 'Search...'
-          },
-          width: '17%',
-          thClass: 'clm-author',
-          tdClass: 'clm-author'
-        },
-        {
-          label: '巻数',
-          field: 'volume',
-          width: '5%',
-          thClass: 'clm-volume',
-          tdClass: 'clm-volume'
-        },
-        {
-          label: '話数',
-          field: 'chapter',
-          width: '5%',
-          thClass: 'clm-chapter',
-          tdClass: 'clm-chapter'
-        },
-        {
-          label: '状態',
-          field: 'status',
-          filterOptions: {
-            enabled: true,
-            placeholder: 'Search...',
-            filterDropdownItems: [
-              'Active',
-              'Inactive',
-              'Complete'
-            ]
-          },
-          width: '12%',
-          thClass: 'clm-status',
-          tdClass: 'clm-status'
-        },
-        {
-          label: '点数',
-          field: 'point',
-          width: '5%',
-          thClass: 'clm-point',
-          tdClass: 'clm-point'
-        },
-        {
-          label: '更新',
-          field: 'updated_at',
-          type: 'date',
-          dateInputFormat: 'yyyy-MM-dd HH:mm:ss',
-          dateOutputFormat: 'yy/MM/dd HH:mm',
-          width: '17%',
-          thClass: 'clm-updated',
-          tdClass: 'clm-updated'
-        },
-        {
-          label: '',
-          field: 'edit',
-          width: '5%',
-          thClass: 'clm-edit',
-          tdClass: 'clm-edit'
-        }
-      ]
-    }
-  },
   async fetch () {
-    await this.$axios.$get('books')
-      .then((res) => {
-        this.books = res
-      }).catch((error) => {
-        console.log(error)
-      })
+    await this.$store.dispatch('book/init')
   },
   methods: {
     openEditBook (id) {
-      const bookIdx = this.books.findIndex(b => b.id === id)
-      const book = this.books[bookIdx]
-      book.bookIdx = bookIdx
-      this.$store.commit('book/target', book)
+      this.$store.commit('book/target', id)
       this.$modal.show('editBook')
+    },
+    sortBy (key) {
+      this.$store.commit('book/sortBy', key)
     }
   }
 }
@@ -136,7 +88,7 @@ export default {
   color: #EEEEEE;
 }
 
-::v-deep table.main-table {
+table.main-table {
   color: #d5d5d8;
   margin: 0 auto;
   width: 100%;
@@ -147,14 +99,12 @@ export default {
     border-color: #26262F;
     background-color: #2B2C34;
     padding: 12px;
+    text-align: left;
     &.filter-th {
       padding-top: 0 !important;
     }
     &:nth-child(1), &:nth-last-child(1) {
       border-style: none;
-    }
-    &.vgt-right-align {
-      text-align: left;
     }
   }
   td {
@@ -182,29 +132,37 @@ export default {
     opacity: 1;
   }
   .clm-title {
+    width: 33%;
     min-width: 100px;
   }
   .clm-author {
+    width: 17%;
     min-width: 80px;
   }
   .clm-volume {
+    width: 5%;
     min-width: 60px;
   }
   .clm-chapter {
+    width: 5%;
     min-width: 60px;
   }
   .clm-status {
+    width: 12%;
     min-width: 120px;
   }
-  .clm-updated {
-    min-width: 130px;
-  }
   .clm-point {
+    width: 5%;
     min-width: 60px;
   }
+  .clm-updated {
+    width: 17%;
+    min-width: 130px;
+  }
   .clm-edit {
-    text-align: center;
+    width: 5%;
     min-width: 50px;
+    text-align: center;
   }
 }
 
@@ -223,9 +181,5 @@ export default {
   &.Complete {
     background: radial-gradient(circle at 40% -25%, #81e8f6, #76deef 10%, #055194 80%, #062745 100%);
   }
-}
-
-::v-deep .v--modal {
-  background-color: #111111;
 }
 </style>

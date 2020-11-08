@@ -1,7 +1,7 @@
 <template>
   <div>
     <navbar />
-    <books-tables />
+    <books-table />
     <add-book />
     <edit-book />
     <delete-book />

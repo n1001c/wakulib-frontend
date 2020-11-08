@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export const state = () => ({
   books: [],
   targetIdx: 0,
@@ -20,6 +22,7 @@ export const mutations = {
   // string:keyをキーにして昇順ソート
   // 既に昇順ソート済みなら降順にする
   sortBy (state, key) {
+    if (key === 'title') { key = 'phonetic' }
     if (key === state.lastSortedKey) {
       state.books.reverse()
       return
@@ -38,7 +41,9 @@ export const mutations = {
     state.lastSortedKey = ''
   },
   updateBook (state, book) {
-    state.books[state.targetIdx] = book
+    // ↓直接変更してもvuexが検知しないから画面に反映されない
+    // state.books[state.targetIdx] = book
+    Vue.set(state.books, state.targetIdx, book)
     state.lastSortedKey = ''
   },
   destroyBook (state) {

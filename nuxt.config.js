@@ -1,5 +1,5 @@
 export default {
-  mode: 'spa',
+  ssr: false,
   /*
   ** Headers of the page
   */
@@ -37,6 +37,7 @@ export default {
     { src: '~/plugins/localStorage.js', ssr: false },
     { src: '~/plugins/vue-good-table', ssr: false },
     { src: '~/plugins/vue-js-modal' },
+    { src: '~/plugins/vue-slider-component' },
     '@/plugins/axios'
   ],
   /*
