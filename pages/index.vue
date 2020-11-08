@@ -5,6 +5,7 @@
     <add-book />
     <edit-book />
     <delete-book />
+    <search-book />
     <navbar-bottom />
     <button @click="logout">
       ログアウト

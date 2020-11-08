@@ -2,15 +2,15 @@
   <div class="main">
     <modal
       :delay="100"
-      name="deleteBook"
       :width="420"
+      name="deleteBook"
       height="140"
     >
       <p>この本をライブラリから削除しますか？</p>
-      <button class="cancel-button pointer" @click="$modal.hide('deleteBook')">
+      <button @click="$modal.hide('deleteBook')" class="cancel-button pointer">
         キャンセル
       </button>
-      <button class="delete-button pointer" @click="deleteBook">
+      <button @click="deleteBook" class="delete-button pointer">
         削除
       </button>
     </modal>

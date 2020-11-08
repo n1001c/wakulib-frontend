@@ -15,8 +15,10 @@
           <i @click="$modal.hide('addBook')" class="fas fa-times pointer" title="閉じる" />
         </div>
         <div class="reset-button">
-          <!--<i class="fas fa-trash pointer" @click="reset" title="リセット"></i>-->
           <i @click="reset" class="far fa-file pointer" title="リセット" />
+        </div>
+        <div class="search-button">
+          <i @click="$modal.show('searchBook')" class="fas fa-search pointer" title="検索" />
         </div>
         <form @submit.prevent="addBook" autocomplete="off">
           <div class="items-container">
@@ -169,6 +171,16 @@ export default {
     top: 60px;
     right: 10px;
     font-size: 46px;
+    transition: all 0.2s;
+    &:hover {
+      transform: scale(1.3);
+    }
+  }
+  .search-button {
+    position: absolute;
+    top: 125px;
+    right: 6px;
+    font-size: 40px;
     transition: all 0.2s;
     &:hover {
       transform: scale(1.3);

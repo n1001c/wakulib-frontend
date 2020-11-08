@@ -1,3 +1,6 @@
+require('dotenv').config()
+const { RAKUTEN_API_APPLICATION_ID, RAKUTEN_API_APPLICATION_SECRET } = process.env
+
 export default {
   ssr: false,
   /*
@@ -52,14 +55,24 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/dotenv'
   ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'http://localhost:8000/api'
+    proxy: true
+  },
+  proxy: {
+    '/api/': {
+      target: 'http://localhost:8000'
+    },
+    '/rakutensearch/': {
+      target: 'https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404',
+      pathRewrite: { '^/rakutensearch/': '' }
+    }
   },
   /*
   ** Build configuration
@@ -72,5 +85,10 @@ export default {
     }
   },
   // auto import components
-  components: true
+  components: true,
+  // env file
+  env: {
+    RAKUTEN_API_APPLICATION_ID,
+    RAKUTEN_API_APPLICATION_SECRET
+  }
 }

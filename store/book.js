@@ -53,7 +53,7 @@ export const mutations = {
 
 export const actions = {
   async init (context) {
-    context.commit('initBooks', await this.$axios.$get('books'))
+    context.commit('initBooks', await this.$axios.$get('/api/books'))
     context.commit('sortBy', 'updated_at')
     context.commit('sortBy', 'updated_at')
   },
