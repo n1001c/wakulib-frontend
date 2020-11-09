@@ -45,13 +45,14 @@
           </td>
           <td class="clm-status">
             <figure :class="book.status" class="circle" />
-            {{ book.status }}
+            {{ book.status === 'Active' ? '連載中' : book.status === 'Inactive' ? '休載中' : '完結' }}
           </td>
           <td class="clm-point">
             {{ book.point }}
           </td>
           <td class="clm-update">
-            {{ book.updated_at }}
+            <timeago :datetime="book.updated_at" :auto-update="60" />
+            <!-- {{ book.updated_at }} -->
           </td>
           <td class="clm-edit">
             <a @click="openEditBook(index)">
@@ -86,6 +87,7 @@ export default {
   height: calc(100vh - 100px);
   background-color: #1F2224;
   color: #EEEEEE;
+  overflow: scroll;
 }
 
 table.main-table {
@@ -94,6 +96,8 @@ table.main-table {
   width: 100%;
   border-collapse: collapse;
   th {
+    position: sticky;
+    top: 0;
     border-style: none solid;
     border-width: 3px;
     border-color: #26262F;
@@ -109,6 +113,7 @@ table.main-table {
   }
   td {
     @extend th;
+    position: static;
   }
   tr:nth-child(odd) td {
     background-color: #2E2F3B;

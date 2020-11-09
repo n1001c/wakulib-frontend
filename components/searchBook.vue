@@ -1,11 +1,10 @@
 <template>
   <div class="main">
     <modal
-      :delay="100"
       :minWidth="400"
       :minHeight="400"
-      width="80%"
-      height="80%"
+      width="800"
+      height="700"
       name="searchBook"
     >
       <div class="wrapper">
@@ -15,25 +14,58 @@
         <div class="reset-button">
           <i @click="reset" class="far fa-file pointer" title="リセット" />
         </div>
-        <form @submit.prevent="searchBook" autocomplete="off">
+        <form @submit.prevent="preSearch" autocomplete="off">
           <div class="items-container">
             <div class="item">
               <label class="attribute" for="title">題名</label>
-              <input id="title" v-model="book.title" type="text" placeholder="Re:ゼロから始める異世界生活">
+              <input id="title" v-model="prebook.title" type="text" placeholder="Re:ゼロから始める異世界生活">
             </div>
             <div class="item">
               <label class="attribute" for="author">作者</label>
-              <input id="author" v-model="book.author" type="text" placeholder="長月達平">
+              <input id="author" v-model="prebook.author" type="text" placeholder="長月達平">
             </div>
             <div class="item">
               <label class="attribute" for="publisher">出版社</label>
-              <input id="publisher" v-model="book.publisher" type="text" placeholder="KADOKAWA">
+              <input id="publisher" v-model="prebook.publisher" type="text" placeholder="KADOKAWA">
             </div>
           </div>
           <button class="button-submit pointer" type="submit">
             検索
           </button>
         </form>
+        <div class="table-wrapper">
+          <table class="main-table">
+            <thead>
+              <tr>
+                <th class="clm-title">
+                  名前
+                </th>
+                <th class="clm-author">
+                  作者
+                </th>
+                <th class="clm-publisher">
+                  出版社
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, index) in books" @click="selectBook(index)">
+                <td class="clm-title">
+                  <img :src="row.imageUrl">
+                  <div class="imageStr">
+                    {{ row.title }}
+                  </div>
+                </td>
+                <td class="clm-author">
+                  {{ row.author }}
+                </td>
+                <td class="clm-publisher">
+                  {{ row.publisher }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </modal>
   </div>
@@ -44,6 +76,11 @@ export default {
   data () {
     return {
       book: {
+        title: '',
+        author: '',
+        publisher: ''
+      },
+      prebook: {
         title: '',
         author: '',
         publisher: ''
@@ -59,12 +96,13 @@ export default {
     }
   },
   methods: {
-    async searchBook () {
+    async searchBook (pagearg = 1) {
       const param = {
         applicationId: process.env.RAKUTEN_API_APPLICATION_ID,
         formatVersion: 2,
         outOfStockFlag: 1,
         booksGenreId: '001001',
+        page: pagearg,
         elements: 'count,page,first,last,pageCount,title,titleKana,author,publisherName,mediumImageUrl'
       }
       if (this.book.title !== '') {
@@ -98,6 +136,28 @@ export default {
         })
       }
       console.log(this.books)
+    },
+    preSearch () {
+      this.book.title = this.prebook.title
+      this.book.author = this.prebook.author
+      this.book.publisher = this.prebook.publisher
+      this.searchBook()
+    },
+    pageIncrement () {
+      this.searchBook(++this.tableData.page)
+    },
+    pageDecrement () {
+      this.searchBook(--this.tableData.page)
+    },
+    selectBook (idx) {
+      this.$store.commit('newBook/reset')
+      this.$store.commit('newBook/setTitle', this.books[idx].title)
+      this.$store.commit('newBook/setPhonetic', this.books[idx].phonetic)
+      this.$store.commit('newBook/setAuthor', this.books[idx].author)
+      this.$store.commit('newBook/setPublisher', this.books[idx].publisher)
+      this.$store.commit('newBook/setImageUrl', this.books[idx].imageUrl)
+      this.reset()
+      this.$modal.hide('searchBook')
     },
     reset () {
       Object.assign(this.$data, this.$options.data())
@@ -187,29 +247,89 @@ export default {
       outline: 0;
     }
   }
+
+  .table-wrapper {
+    height: 510px;
+    overflow: scroll;
+    margin-top: 10px;
+    // background-color: #2E2F3B;
+    background-color: #1F2224;
+  }
+  table.main-table {
+    color: #d5d5d8;
+    margin: 0 auto;
+    padding: 0 30px;
+    width: 100%;
+    border-collapse: collapse;
+    th {
+      position: sticky;
+      top: 0;
+      border-style: none solid;
+      border-width: 3px;
+      border-color: #26262F;
+      background-color: #22222A;
+      padding: 12px;
+      text-align: left;
+      &.filter-th {
+        padding-top: 0 !important;
+      }
+      &:nth-child(1), &:nth-last-child(1) {
+        border-style: none;
+      }
+    }
+    td {
+      @extend th;
+      background-color: #2B2C34;
+      position: static;
+    }
+    tr:nth-child(odd) td {
+      background-color: #2E2F3B;
+    }
+    a {
+      cursor: pointer;
+      i.icon {
+        transition: all 0.2s;
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+    .vgt-input, .vgt-select {
+      color: #7A7C84;
+      background-color: #3A3C44;
+      border: none;
+    }
+    .vgt-input::placeholder {
+      color: #7A7C84;
+      opacity: 1;
+    }
+    .clm-title {
+      width: 40%;
+      min-width: 100px;
+      img {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 85px;
+      }
+      .imageStr {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 10px;
+        width: 190px;
+      }
+    }
+    .clm-author {
+      width: 30%;
+      min-width: 80px;
+    }
+    .clm-publisher {
+      width: 30%;
+      min-width: 80px;
+    }
+  }
+
   .pointer {
     cursor: pointer;
-  }
-  .vue-slider {
-    display: inline-block;
-    // style属性上書きのための仕方ないimportant
-    padding: 2px 0 !important;
-    margin-left: 15px !important;
-    .vue-slider-rail {
-      background-color: #111111;
-    }
-    .vue-slider-process {
-      background-color: #EEEEEE;
-    }
-    &:hover .vue-slider-process {
-      background-color: #EEEEEE;
-    }
-    .vue-slider-dot-handle {
-      border-color: #36ABFF;
-    }
-    .vue-slider-dot-handle-focus {
-      box-shadow: none;
-    }
   }
 }
 </style>

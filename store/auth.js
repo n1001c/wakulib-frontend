@@ -30,14 +30,14 @@ export const mutations = {
 
 export const actions = {
   async login (context, payload) {
-    const res = await this.$axios.$post('login', {
+    const res = await this.$axios.$post('/api/login', {
       email: payload.email,
       password: payload.password
     })
     context.commit('storelogin', res)
   },
   async logout (context, payload) {
-    await this.$axios.$post('logout')
+    await this.$axios.$post('/api/logout')
     context.commit('storelogout')
   },
   nuxtClientInit ({ commit, state, dispatch }, { req }) {

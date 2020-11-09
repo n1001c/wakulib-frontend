@@ -48,25 +48,27 @@ export const mutations = {
   },
   destroyBook (state) {
     state.books.splice(state.targetIdx--, 1)
+    if (state.targetIdx < 0) { state.targetIdx = 0 }
   }
 }
 
 export const actions = {
   async init (context) {
     context.commit('initBooks', await this.$axios.$get('/api/books'))
+    context.commit('sortBy', 'title')
     context.commit('sortBy', 'updated_at')
     context.commit('sortBy', 'updated_at')
   },
   async store (context, payload) {
-    const res = await this.$axios.$post('books', payload)
+    const res = await this.$axios.$post('/api/books', payload)
     context.commit('storeBook', res)
   },
   async update (context, payload) {
-    const res = await this.$axios.$put('books/' + context.state.books[context.state.targetIdx].id, payload)
+    const res = await this.$axios.$put('/api/books/' + context.state.books[context.state.targetIdx].id, payload)
     context.commit('updateBook', res)
   },
   async destroy (context) {
-    await this.$axios.$delete('books/' + context.state.books[context.state.targetIdx].id)
+    await this.$axios.$delete('/api/books/' + context.state.books[context.state.targetIdx].id)
     context.commit('destroyBook')
   }
 }

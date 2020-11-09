@@ -1,7 +1,6 @@
 <template>
   <div class="main">
     <modal
-      :delay="100"
       :width="420"
       name="deleteBook"
       height="140"

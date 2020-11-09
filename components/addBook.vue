@@ -1,7 +1,6 @@
 <template>
   <div class="main">
     <modal
-      :delay="100"
       :minWidth="650"
       :width="650"
       :minHeight="500"
@@ -24,45 +23,45 @@
           <div class="items-container">
             <div class="item">
               <label class="attribute" for="title">題名</label>
-              <input id="title" v-model="book.title" type="text" placeholder="Re:ゼロから始める異世界生活" required>
+              <input id="title" v-model="title" type="text" placeholder="Re:ゼロから始める異世界生活" required>
             </div>
             <div class="item">
               <label class="attribute" for="phonetic">読みがな</label>
-              <input id="phonetic" v-model="book.phonetic" type="text" placeholder="り・ぜろからはじめるいせかいせいかつ">
+              <input id="phonetic" v-model="phonetic" type="text" placeholder="り・ぜろからはじめるいせかいせいかつ">
             </div>
             <div class="item">
               <label class="attribute" for="author">作者</label>
-              <input id="author" v-model="book.author" type="text" placeholder="長月達平">
+              <input id="author" v-model="author" type="text" placeholder="長月達平">
             </div>
             <div class="item">
               <label class="attribute" for="publisher">出版社</label>
-              <input id="publisher" v-model="book.publisher" type="text" placeholder="KADOKAWA">
+              <input id="publisher" v-model="publisher" type="text" placeholder="KADOKAWA">
             </div>
             <div class="item">
               <label class="attribute" for="volume">巻数</label>
-              <input id="volume" v-model="book.volume" type="number">
+              <input id="volume" v-model="volume" type="number">
               <div class="minus-button">
-                <i @click="book.volume--" class="far fa-arrow-alt-circle-down pointer" />
+                <i @click="volume--" class="far fa-arrow-alt-circle-down pointer" />
               </div>
               <div class="plus-button">
-                <i @click="book.volume++" class="far fa-arrow-alt-circle-up pointer" />
+                <i @click="volume++" class="far fa-arrow-alt-circle-up pointer" />
               </div>
             </div>
             <div class="item">
               <label class="attribute" for="chapter">話数</label>
-              <input id="chapter" v-model="book.chapter" type="number">
+              <input id="chapter" v-model="chapter" type="number">
               <div class="minus-button">
-                <i @click="book.chapter--" class="far fa-arrow-alt-circle-down pointer" />
+                <i @click="chapter--" class="far fa-arrow-alt-circle-down pointer" />
               </div>
               <div class="plus-button">
-                <i @click="book.chapter++" class="far fa-arrow-alt-circle-up pointer" />
+                <i @click="chapter++" class="far fa-arrow-alt-circle-up pointer" />
               </div>
             </div>
             <div class="item">
               <label class="attribute" for="point">点数</label>
-              <input id="point" v-model="book.point" type="number" readonly>
+              <input id="point" v-model="point" type="number" readonly>
               <vue-slider
-                v-model="book.point"
+                v-model="point"
                 :width="300"
                 :height="6"
                 :min="0"
@@ -78,7 +77,7 @@
               <label class="attribute">状態</label>
               <input
                 id="active"
-                v-model="book.status"
+                v-model="status"
                 class="radio-status"
                 type="radio"
                 name="status"
@@ -87,7 +86,7 @@
               <label class="label-status status-active pointer" for="active">連載中</label>
               <input
                 id="inactive"
-                v-model="book.status"
+                v-model="status"
                 class="radio-status"
                 type="radio"
                 name="status"
@@ -96,7 +95,7 @@
               <label class="label-status status-inactive pointer" for="inactive">休載中</label>
               <input
                 id="complete"
-                v-model="book.status"
+                v-model="status"
                 class="radio-status"
                 type="radio"
                 name="status"
@@ -104,12 +103,17 @@
               >
               <label class="label-status status-complete pointer" for="complete">完結</label>
             </div>
+            <div class="item">
+              <label class="attribute" for="image_url">画像URL</label>
+              <input id="image_url" v-model="image_url" type="text" placeholder="https://path.to/your.image.jpg">
+            </div>
           </div>
           <div class="button-submit-wrapper">
             <button class="button-submit pointer" type="submit">
               追加
             </button>
           </div>
+
         </form>
       </div>
     </modal>
@@ -120,28 +124,65 @@
 export default {
   data () {
     return {
-      book: {
-        title: '',
-        phonetic: '',
-        author: '',
-        publisher: '',
-        volume: '',
-        chapter: '',
-        point: 50,
-        image_url: '',
-        status: 'Active'
-      }
+    }
+  },
+  computed: {
+    title: {
+      get () { return this.$store.getters['newBook/getTitle'] },
+      set (val) { this.$store.commit('newBook/setTitle', val) }
+    },
+    phonetic: {
+      get () { return this.$store.getters['newBook/getPhonetic'] },
+      set (val) { this.$store.commit('newBook/setPhonetic', val) }
+    },
+    author: {
+      get () { return this.$store.getters['newBook/getAuthor'] },
+      set (val) { this.$store.commit('newBook/setAuthor', val) }
+    },
+    publisher: {
+      get () { return this.$store.getters['newBook/getPublisher'] },
+      set (val) { this.$store.commit('newBook/setPublisher', val) }
+    },
+    volume: {
+      get () { return this.$store.getters['newBook/getVolume'] },
+      set (val) { this.$store.commit('newBook/setVolume', val) }
+    },
+    chapter: {
+      get () { return this.$store.getters['newBook/getChapter'] },
+      set (val) { this.$store.commit('newBook/setChapter', val) }
+    },
+    point: {
+      get () { return this.$store.getters['newBook/getPoint'] },
+      set (val) { this.$store.commit('newBook/setPoint', val) }
+    },
+    image_url: {
+      get () { return this.$store.getters['newBook/getImageUrl'] },
+      set (val) { this.$store.commit('newBook/setImageUrl', val) }
+    },
+    status: {
+      get () { return this.$store.getters['newBook/getStatus'] },
+      set (val) { this.$store.commit('newBook/setStatus', val) }
     }
   },
   methods: {
-    async addBook () {
-      this.book.volume = parseInt(this.book.volume) || 0
-      this.book.chapter = parseInt(this.book.chapter) || 0
-      await this.$store.dispatch('book/store', this.book)
-      this.$modal.hide('addBook')
-    },
     reset () {
-      Object.assign(this.$data, this.$options.data())
+      this.$store.commit('newBook/reset')
+    },
+    async addBook () {
+      this.$store.commit('newBook/finalize')
+      await this.$store.dispatch('book/store', {
+        title: this.title,
+        phonetic: this.phonetic,
+        author: this.author,
+        publisher: this.publisher,
+        volume: this.volume,
+        chapter: this.chapter,
+        point: this.point,
+        imageUrl: this.image_url,
+        status: this.status
+      })
+      this.reset()
+      this.$modal.hide('addBook')
     }
   }
 }

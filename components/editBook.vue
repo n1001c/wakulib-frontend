@@ -1,7 +1,6 @@
 <template>
   <div class="main">
     <modal
-      :delay="100"
       :minWidth="650"
       :width="650"
       :minHeight="500"
@@ -137,6 +136,7 @@ export default {
   },
   watch: {
     targetBook (target) {
+      if (this.$store.state.book.books.length === 0) { return }
       this.book.title = target.title
       this.book.phonetic = target.phonetic
       this.book.author = target.author

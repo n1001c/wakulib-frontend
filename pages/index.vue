@@ -7,9 +7,11 @@
     <delete-book />
     <search-book />
     <navbar-bottom />
-    <button @click="logout">
-      ログアウト
-    </button>
+    <!--
+      <button @click="logout">
+        ログアウト
+      </button>
+      -->
   </div>
 </template>
 

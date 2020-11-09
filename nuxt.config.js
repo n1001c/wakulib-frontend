@@ -41,6 +41,7 @@ export default {
     { src: '~/plugins/vue-good-table', ssr: false },
     { src: '~/plugins/vue-js-modal' },
     { src: '~/plugins/vue-slider-component' },
+    { src: '~/plugins/vue-timeago' },
     '@/plugins/axios'
   ],
   /*
