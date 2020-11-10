@@ -1,9 +1,0 @@
-[[redirects]]
-  from = "/api/*"
-  to = "https://wakulib.herokuapp.com/api/:splat"
-  force = true
-
-[[redirects]]
-  from = "/rakutensearch/"
-  to = "https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404"
-  force = true
