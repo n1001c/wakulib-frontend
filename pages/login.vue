@@ -1,13 +1,19 @@
 <template>
   <div class="login-main">
     <div class="wrapper">
-      <input class="menu-input" id="sign-in-input" v-model="mode" type="radio" value="signIn">
+      <input id="sign-in-input" v-model="mode" class="menu-input" type="radio" value="signIn">
       <label class="menu-label" for="sign-in-input">ログイン</label>
-      <input class="menu-input" id="sign-up-input" v-model="mode" type="radio" value="signUp">
+      <input id="sign-up-input" v-model="mode" class="menu-input" type="radio" value="signUp">
       <label class="menu-label" for="sign-up-input">新規登録</label>
       <sign-in v-if="mode === 'signIn'" />
       <sign-up v-else />
       <notifications group="login" position="bottom right" />
+      <loading
+        :active.sync="$store.getters['load/get']"
+        color="#FFF"
+        background-color="#000000"
+        blur="0px"
+      />
     </div>
   </div>
 </template>

@@ -8,24 +8,18 @@
     <search-book />
     <settings />
     <navbar-bottom />
-    <!--
-      <button @click="logout">
-        ログアウト
-      </button>
-      -->
+    <loading
+      :active.sync="$store.getters['load/get']"
+      color="#FFF"
+      background-color="#000000"
+      blur="0px"
+    />
   </div>
 </template>
 
 <script>
 export default {
-  middleware: 'loggedIn',
-  methods: {
-    logout () {
-      this.$store.dispatch('auth/logout').then(() => {
-        this.$router.push({ path: '/login' })
-      })
-    }
-  }
+  middleware: 'loggedIn'
 }
 </script>
 

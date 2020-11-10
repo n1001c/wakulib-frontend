@@ -20,7 +20,9 @@
 export default {
   methods: {
     async deleteBook () {
+      this.$store.commit('load/on')
       await this.$store.dispatch('book/destroy')
+      this.$store.commit('load/off')
       this.$modal.hide('deleteBook')
       this.$modal.hide('editBook')
     }

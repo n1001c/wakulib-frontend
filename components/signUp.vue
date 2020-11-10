@@ -51,9 +51,11 @@ export default {
         })
         return
       }
+      this.$store.commit('load/on')
       try {
         await this.$store.dispatch('auth/signup', this.form)
       } catch (error) {
+        this.$store.commit('load/off')
         this.$notify({
           group: 'login',
           type: 'error',
@@ -63,8 +65,10 @@ export default {
         return
       }
       await this.$store.dispatch('auth/login', this.form).then(() => {
+        this.$store.commit('load/off')
         this.$router.push({ path: '/' })
       }).catch(() => {
+        this.$store.commit('load/off')
         this.$notify({
           group: 'login',
           type: 'error',

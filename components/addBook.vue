@@ -113,7 +113,6 @@
               追加
             </button>
           </div>
-
         </form>
       </div>
     </modal>
@@ -169,6 +168,7 @@ export default {
       this.$store.commit('newBook/reset')
     },
     async addBook () {
+      this.$store.commit('load/on')
       this.$store.commit('newBook/finalize')
       await this.$store.dispatch('book/store', {
         title: this.title,
@@ -182,6 +182,7 @@ export default {
         status: this.status
       })
       this.reset()
+      this.$store.commit('load/off')
       this.$modal.hide('addBook')
     }
   }

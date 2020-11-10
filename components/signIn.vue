@@ -32,9 +32,12 @@ export default {
   },
   methods: {
     async login () {
+      this.$store.commit('load/on')
       await this.$store.dispatch('auth/login', this.form).then(() => {
+        this.$store.commit('load/off')
         this.$router.push({ path: '/' })
       }).catch(() => {
+        this.$store.commit('load/off')
         this.$notify({
           group: 'login',
           type: 'error',

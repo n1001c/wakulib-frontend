@@ -43,6 +43,7 @@ export default {
     { src: '~/plugins/vue-slider-component' },
     { src: '~/plugins/vue-timeago' },
     { src: '~/plugins/vue-notification' },
+    { src: '~/plugins/vue-loading-overlay' },
     '@/plugins/axios'
   ],
   /*

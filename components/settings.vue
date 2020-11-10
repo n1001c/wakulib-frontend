@@ -14,7 +14,7 @@
           <i @click="$modal.hide('settings')" class="fas fa-times pointer" title="閉じる" />
         </div>
         <div class="button-submit-wrapper">
-          <button class="button-submit pointer" @click="logout">
+          <button @click="logout" class="button-submit pointer">
             ログアウト
           </button>
         </div>
@@ -27,8 +27,12 @@
 export default {
   methods: {
     logout () {
+      this.$store.commit('load/on')
       this.$store.dispatch('auth/logout').then(() => {
+        this.$store.commit('load/off')
         this.$router.push({ path: '/login' })
+      }).catch(() => {
+        this.$store.commit('load/off')
       })
     }
   }

@@ -48,7 +48,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="pointer">
               <tr v-for="(row, index) in books" @click="selectBook(index)">
                 <td class="clm-title">
                   <img :src="row.imageUrl">
@@ -97,6 +97,7 @@ export default {
   },
   methods: {
     async searchBook (pagearg = 1) {
+      this.$store.commit('load/on')
       const param = {
         applicationId: process.env.RAKUTEN_API_APPLICATION_ID,
         formatVersion: 2,
@@ -135,7 +136,7 @@ export default {
           })
         })
       }
-      console.log(this.books)
+      this.$store.commit('load/off')
     },
     preSearch () {
       this.book.title = this.prebook.title

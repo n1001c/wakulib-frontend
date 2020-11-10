@@ -149,9 +149,11 @@ export default {
   },
   methods: {
     async editBook () {
+      this.$store.commit('load/on')
       this.book.volume = parseInt(this.book.volume) || 0
       this.book.chapter = parseInt(this.book.chapter) || 0
       await this.$store.dispatch('book/update', this.book)
+      this.$store.commit('load/off')
       this.$modal.hide('editBook')
     }
   }
