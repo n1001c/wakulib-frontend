@@ -42,6 +42,7 @@ export default {
     { src: '~/plugins/vue-js-modal' },
     { src: '~/plugins/vue-slider-component' },
     { src: '~/plugins/vue-timeago' },
+    { src: '~/plugins/vue-notification' },
     '@/plugins/axios'
   ],
   /*
@@ -68,7 +69,8 @@ export default {
   },
   proxy: {
     '/api/': {
-      target: 'http://localhost:8000'
+      // target: 'http://localhost:8000'
+      target: 'https://wakulib.herokuapp.com'
     },
     '/rakutensearch/': {
       target: 'https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404',

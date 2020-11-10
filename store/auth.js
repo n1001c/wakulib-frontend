@@ -35,10 +35,19 @@ export const actions = {
       password: payload.password
     })
     context.commit('storelogin', res)
+    console.log('ログイン完了')
   },
   async logout (context, payload) {
     await this.$axios.$post('/api/logout')
     context.commit('storelogout')
+  },
+  async signup (context, payload) {
+    await this.$axios.$post('/api/users', {
+      name: payload.name,
+      email: payload.email,
+      password: payload.password
+    })
+    console.log('サインアップ完了')
   },
   nuxtClientInit ({ commit, state, dispatch }, { req }) {
     createPersistedState({

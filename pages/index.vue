@@ -6,6 +6,7 @@
     <edit-book />
     <delete-book />
     <search-book />
+    <settings />
     <navbar-bottom />
     <!--
       <button @click="logout">

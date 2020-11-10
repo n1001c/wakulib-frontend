@@ -5,15 +5,13 @@
     </div>
     <div class="right">
       <a @click="$modal.show('addBook')" title="本の追加"><i class="fas fa-plus icon" /></a>
-      <a @click="logout" title="設定"><i class="fas fa-cog icon" /></a>
+      <a @click="$modal.show('settings')" title="設定"><i class="fas fa-cog icon" /></a>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  methods: {
-  }
 }
 </script>
 
