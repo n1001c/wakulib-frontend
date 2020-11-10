@@ -3,6 +3,9 @@ const { RAKUTEN_API_APPLICATION_ID, RAKUTEN_API_APPLICATION_SECRET } = process.e
 
 export default {
   ssr: false,
+  generate: {
+    fallback: true
+  },
   /*
   ** Headers of the page
   */
