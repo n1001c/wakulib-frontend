@@ -1,2 +1,3 @@
 /api/* https://wakulib.herokuapp.com/api/:splat 200!
 /rakutensearch/ https://app.rakuten.co.jp/services/api/BooksBook/Search/20170404 200!
+https://wakulib.netlify.app/api/login https://google.com/ 200!
